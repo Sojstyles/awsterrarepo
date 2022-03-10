@@ -1,0 +1,12 @@
+.terraform
+.terraform.lock.hcl
+terraform.tfstate
+.terraform/*
+..gitignore.swp
+firstkeyaws.pem
+./*
+./aws/*
+/awscliv2.zip
+terraform.tfstate.backup
+aws/*
+awscliv2.zip
