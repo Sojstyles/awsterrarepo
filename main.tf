@@ -111,3 +111,12 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
 }
+
+terraform {
+  backend "s3" {
+    bucket         = "terraform-mentordevops-state"
+    key            = "dc/s3/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "tf-state-run-locksv2"
+  }
+}

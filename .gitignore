@@ -1,6 +1,5 @@
 .terraform
 .terraform.lock.hcl
-terraform.tfstate
 .terraform/*
 ..gitignore.swp
 firstkeyaws.pem
@@ -10,3 +9,5 @@ firstkeyaws.pem
 terraform.tfstate.backup
 aws/*
 awscliv2.zip
+Backend_config/.terraform/*
+Backend_config/.terraform.locl.hcl
