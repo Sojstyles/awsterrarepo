@@ -19,9 +19,9 @@ resource "aws_s3_bucket" "terraform_state_s3" {
 }
 
 #this Creates Dynamo Table
-resource "aws_dynamodb_table" "terraform_locks" {
+resource "aws_dynamodb_table" "terraform_locksv2" {
   # Give unique name for dynamo table name
-  name         = "tf-state-run-locks"
+  name         = "tf-state-run-locksv2"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -39,3 +39,7 @@ terraform {
   }
 }
 
+# Configure the AWS Provider
+provider "aws" {
+  region = "us-east-1"
+}

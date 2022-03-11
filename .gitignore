@@ -10,3 +10,6 @@ firstkeyaws.pem
 terraform.tfstate.backup
 aws/*
 awscliv2.zip
+Backend_config/.terraform/*
+Backend_config/.terraform.locl.hcl
+Backend_config/terraform.tfstate.backup

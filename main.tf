@@ -114,7 +114,7 @@ resource "aws_route_table_association" "private" {
 
 terraform {
   backend "s3" {
-    bucket         = "terraform-mentordevops-stat"
+    bucket         = "terraform-mentordevops-state"
     key            = "home/techstellar/DevOps/Aws-terra-docker/firstkeyaws.pem"
     region         = "us-east-1"
     dynamodb_table = "tf-state-run-locks"
