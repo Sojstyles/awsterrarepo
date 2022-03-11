@@ -113,7 +113,7 @@ resource "aws_route_table_association" "private" {
 }
 
 
-#1 -this will create a S3 bucket in AWS
+#this will create a S3 bucket in AWS
 resource "aws_s3_bucket" "terraform_state_s3" {
   #make sure you give unique bucket name
   bucket        = "terraform-mentordevops-state"
@@ -133,7 +133,7 @@ resource "aws_s3_bucket" "terraform_state_s3" {
   }
 }
 
-# 2 - this Creates Dynamo Table
+#this Creates Dynamo Table
 resource "aws_dynamodb_table" "terraform_locks" {
   # Give unique name for dynamo table name
   name         = "tf-state-run-locks"
@@ -145,6 +145,7 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
+#this will push tf.state file to remote s3 backend
 terraform {
   backend "s3" {
     #Replace this with your bucket name!
