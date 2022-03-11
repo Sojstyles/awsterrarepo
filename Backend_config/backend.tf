@@ -30,16 +30,12 @@ resource "aws_dynamodb_table" "terraform_locks" {
   }
 }
 
-#this will push tf.state file to remote s3 backend
 terraform {
-  backend "s3" {
-    #Replace this with your bucket name!
-    bucket = "terraform-mentordevops-state"
-    key    = "dc/s3/terraform.tfstate"
-    region = "us-east-1"
-    #Replace this with your DynamoDB table name!
-    dynamodb_table = "tf-state-run-locks"
-    encrypt        = true
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
   }
 }
 
