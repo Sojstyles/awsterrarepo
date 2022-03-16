@@ -7,5 +7,4 @@ resource "aws_instance" "myec2" {
   tags = {
     Name = "Terraform-Ec2"
   }
-
 }
