@@ -1,7 +1,7 @@
 #this will create a S3 bucket in AWS
 resource "aws_s3_bucket" "terraform_state_s3" {
   #make sure you give unique bucket name
-  bucket        = "terraform-mentordevops-state"
+  bucket        = "terraform-awsdevops-state"
   force_destroy = true
   # Enable versioning to see full revision history of our state files
   versioning {
@@ -19,9 +19,9 @@ resource "aws_s3_bucket" "terraform_state_s3" {
 }
 
 #this Creates Dynamo Table
-resource "aws_dynamodb_table" "terraform_locksv2" {
+resource "aws_dynamodb_table" "terraform_locks" {
   # Give unique name for dynamo table name
-  name         = "tf-state-run-locksv2"
+  name         = "tf-state-run-locks"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
   attribute {
@@ -41,5 +41,6 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
 }
+
