@@ -5,6 +5,13 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "terraform-awsdevops-state"
+    key            = "dc-us/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "tf-state-run-locks"
+  }
 }
 
 # Configure the AWS Provider
@@ -123,13 +130,4 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
-}
-
-terraform {
-  backend "s3" {
-    bucket         = "terraform-awsdevops-state"
-    key            = "dc-us/terraform.tfstate"
-    region         = "us-east-2"
-    dynamodb_table = "tf-state-run-locks"
-  }
 }
