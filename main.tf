@@ -5,6 +5,13 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "terraform-awsdevops-state"
+    key            = "dc-us/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "tf-state-run-locks"
+  }
 }
 
 # Configure the AWS Provider
@@ -62,7 +69,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main"
+    Name = var.environemnt_code
   }
 }
 
@@ -79,7 +86,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "main"
+    Name = var.environemnt_code
   }
 }
 
@@ -92,7 +99,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "public"
+    Name = "${var.environemnt_code}-public"
   }
 }
 
@@ -114,7 +121,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "private${count.index}"
+    Name = "${var.environemnt_code}-private${count.index}"
   }
 }
 
@@ -123,13 +130,4 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
-}
-
-terraform {
-  backend "s3" {
-    bucket         = "terraform-awsdevops-state"
-    key            = "dc-us/terraform.tfstate"
-    region         = "us-east-2"
-    dynamodb_table = "tf-state-run-locks"
-  }
 }
