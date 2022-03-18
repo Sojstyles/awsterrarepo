@@ -46,7 +46,6 @@ resource "aws_security_group" "TerraformEC2_security" {
   }
 
   tags = {
-    Name          = "TerraformEC2_security"
-    instance_name = "Terraform_EC2"
+    Name = "${var.environemnt_code}-public"
   }
 }
