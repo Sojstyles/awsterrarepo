@@ -3,7 +3,3 @@ variable "environemnt_code" {
   type        = string
 }
 
-variable "environemnt_code2" {
-  description = "What color code?"
-  type        = string
-}
