@@ -6,7 +6,6 @@ firstkeyaws.pem
 ./*
 ./aws/*
 /awscliv2.zip
-terraform.tfstate.backup
 aws/*
 awscliv2.zip
 Backend_config/.terraform/*

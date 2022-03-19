@@ -5,11 +5,32 @@ terraform {
       version = "~> 3.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "terraform-awsdevops-state"
+    key            = "dc-us/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "tf-state-run-locks"
+  }
 }
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-east-1"
+  region = "us-east-2"
+}
+
+data "aws_ami" "amazon_linux" {
+  most_recent = true
+
+  owners = ["amazon"]
+
+  filter {
+    name = "name"
+
+    values = [
+      "amzn-ami-hvm-*-x86_64-gp2"
+    ]
+  }
 }
 
 # Create a VPC
@@ -29,7 +50,7 @@ resource "aws_subnet" "public" {
   cidr_block = local.public_cidr[count.index]
 
   tags = {
-    Name = "public${count.index}"
+    Name = "${var.environemnt_code}-public${count.index}"
   }
 }
 
@@ -40,7 +61,7 @@ resource "aws_subnet" "private" {
   cidr_block = local.private_cidr[count.index]
 
   tags = {
-    Name = "private${count.index}"
+    Name = "${var.environemnt_code}-private${count.index}"
   }
 }
 
@@ -48,7 +69,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
 
   tags = {
-    Name = "main"
+    Name = var.environemnt_code
   }
 }
 
@@ -65,7 +86,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[count.index].id
 
   tags = {
-    Name = "main"
+    Name = var.environemnt_code
   }
 }
 
@@ -78,10 +99,9 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "public"
+    Name = "${var.environemnt_code}-public"
   }
 }
-
 
 resource "aws_route_table_association" "public" {
   count = length(local.public_cidr)
@@ -101,7 +121,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "private${count.index}"
+    Name = "${var.environemnt_code}-private${count.index}"
   }
 }
 
@@ -110,13 +130,4 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
-}
-
-terraform {
-  backend "s3" {
-    bucket         = "terraform-mentordevops-state"
-    key            = "dc/s3/terraform.tfstate"
-    region         = "us-east-1"
-    dynamodb_table = "tf-state-run-locksv2"
-  }
 }
