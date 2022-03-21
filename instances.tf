@@ -45,7 +45,7 @@ resource "aws_security_group" "TerraformEC2_security" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = [aws_vpc.main.cidr_block, "3.133.26.196/32"]
   }
 
   egress {
