@@ -3,10 +3,20 @@ resource "aws_instance" "myec2" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.TerraformEC2_security.id]
   subnet_id              = aws_subnet.public[0].id
+  key_name               = "awssecondkey"
 
   tags = {
     Name = "${var.environemnt_code}-public"
   }
+}
+
+resource "aws_eip" "elasticip" {
+  vpc = true
+}
+
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = aws_instance.myec2.id
+  allocation_id = aws_eip.elasticip.id
 }
 
 resource "aws_security_group" "TerraformEC2_security" {
