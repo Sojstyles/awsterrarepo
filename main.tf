@@ -19,18 +19,20 @@ provider "aws" {
   region = "us-east-2"
 }
 
-data "aws_ami" "amazon_linux" {
+data "aws_ami" "amazonlinux" {
   most_recent = true
 
-  owners = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-kernel-*"]
+  }
 
   filter {
-    name = "name"
-
-    values = [
-      "amzn-ami-hvm-*-x86_64-gp2"
-    ]
+    name   = "virtualization-type"
+    values = ["hvm"]
   }
+
+  owners = ["137112412989"]
 }
 
 # Create a VPC
