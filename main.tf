@@ -38,11 +38,6 @@ resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 }
 
-resource "aws_key_pair" "deployer" {
-  key_name   = "awssecondkey"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD8Dvx43SzhZWmffWwk7Nxt9MMx3IA0xNIAuak/SqZ5QJooOH8I/p3sSPthOfy8W5H0TzbxTYBfQQ4iOdFOenOCYGsGVQfq9Q9WbpW40gFCrueKAnzxq2HA2M1Qwh+ei7UAf86XsKbvYHPc3T6V8NU1M4Sj/guC9i0Zm3u+MO5hIaZbAQ/AdmpcznI6sU9ThuEBW2yOBadtAlS8VquJnVs7/jcK/Dw9cnuhljU3dg60sN2dRIOJQqEE/ik77FOn8StQFEJq/aF+1wHFSJ2EMGQO6olhCo5kTQiNSGxT4MCwf2QHqXhLchVRBP8jzt0yHgX0gccmmcm/N1OMahinR1Dv techstellar@TechStellar"
-}
-
 locals {
   public_cidr  = ["10.0.0.0/24", "10.0.1.0/24"]
   private_cidr = ["10.0.2.0/24", "10.0.3.0/24"]
