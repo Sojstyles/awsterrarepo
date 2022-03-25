@@ -37,7 +37,7 @@ resource "aws_security_group" "TerraformEC2_security" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = [aws_vpc.main.cidr_block, "3.13.168.101/32"]
   }
 
   ingress {
