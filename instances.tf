@@ -4,7 +4,7 @@ resource "aws_instance" "myec2" {
   vpc_security_group_ids = [aws_security_group.TerraformEC2_security.id]
   subnet_id              = aws_subnet.public[0].id
   key_name               = "thirdkey"
-
+  user_data              = file("ec2userfile.sh")
   tags = {
     Name = "${var.environemnt_code}-public"
   }
@@ -37,7 +37,7 @@ resource "aws_security_group" "TerraformEC2_security" {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.main.cidr_block]
+    cidr_blocks = [aws_vpc.main.cidr_block, "3.13.168.101/32"]
   }
 
   ingress {
