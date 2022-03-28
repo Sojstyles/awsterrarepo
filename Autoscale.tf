@@ -10,6 +10,7 @@ resource "aws_launch_configuration" "my_launch_configuration" {
   # set to false on prod stage.
   # otherwise true, because ssh access might be needed to the instance.
   associate_public_ip_address = false
+
   lifecycle {
     # ensure the new instance is only created before the other one is destroyed.
     create_before_destroy = true
@@ -53,11 +54,10 @@ resource "aws_autoscaling_attachment" "my_aws_autoscaling_attachment" {
 # define the autoscaling group.
 # attach my_launch_configuration into this newly created autoscaling group below.
 resource "aws_autoscaling_group" "my_autoscaling_group" {
-  name              = "my-autoscaling-group"
-  desired_capacity  = 2 # ideal number of instance alive
-  min_size          = 2 # min number of instance alive
-  max_size          = 5 # max number of instance alive
-  health_check_type = "ELB"
+  name             = "my-autoscaling-group"
+  desired_capacity = 2 # ideal number of instance alive
+  min_size         = 2 # min number of instance alive
+  max_size         = 5 # max number of instance alive
 
   # allows deleting the autoscaling group without waiting
   # for all instances in the pool to terminate
@@ -67,9 +67,11 @@ resource "aws_autoscaling_group" "my_autoscaling_group" {
   vpc_zone_identifier = [
     aws_subnet.public[0].id, aws_subnet.public[1].id,
   ]
+
   timeouts {
     delete = "15m" # timeout duration for instances
   }
+
   lifecycle {
     # ensure the new instance is only created before the other one is destroyed.
     create_before_destroy = true

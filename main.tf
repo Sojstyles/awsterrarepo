@@ -134,32 +134,6 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private[count.index].id
 }
 
-# # prepare a subnet for availability zone us-east-1a.
-# resource "aws_subnet" "my_subnet_public_east_2a" {
-#   vpc_id            = aws_vpc.my_vpc.id
-#   cidr_block        = "10.0.0.0/24"
-#   availability_zone = "us-east-2a"
-# }
-
-# # associate the internet gateway into newly created subnet for us-east-1a
-# resource "aws_route_table_association" "my_public_route_association_for_east_1a" {
-#   subnet_id      = aws_subnet.my_subnet_public_southeast_1a.id
-#   route_table_id = aws_route_table.my_public_route_table.id
-# }
-
-# # prepare a subnet for availability zone us-east-1b
-# resource "aws_subnet" "my_subnet_public_east_2b" {
-#   vpc_id            = aws_vpc.my_vpc.id
-#   cidr_block        = "10.0.1.0/24"
-#   availability_zone = "us-east-2b"
-# }
-
-# # associate the internet gateway into newly created subnet for us-east-1b
-# resource "aws_route_table_association" "my_public_route_association_for_east_2b" {
-#   subnet_id      = aws_subnet.my_subnet_public_southeast_1b.id
-#   route_table_id = aws_route_table.my_public_route_table.id
-# }
-
 # create an Application Load Balancer.
 # attach the previous availability zones' subnets into this load balancer.
 
