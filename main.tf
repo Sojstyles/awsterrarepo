@@ -133,3 +133,79 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private[count.index].id
   route_table_id = aws_route_table.private[count.index].id
 }
+
+# # prepare a subnet for availability zone us-east-1a.
+# resource "aws_subnet" "my_subnet_public_east_2a" {
+#   vpc_id            = aws_vpc.my_vpc.id
+#   cidr_block        = "10.0.0.0/24"
+#   availability_zone = "us-east-2a"
+# }
+
+# # associate the internet gateway into newly created subnet for us-east-1a
+# resource "aws_route_table_association" "my_public_route_association_for_east_1a" {
+#   subnet_id      = aws_subnet.my_subnet_public_southeast_1a.id
+#   route_table_id = aws_route_table.my_public_route_table.id
+# }
+
+# # prepare a subnet for availability zone us-east-1b
+# resource "aws_subnet" "my_subnet_public_east_2b" {
+#   vpc_id            = aws_vpc.my_vpc.id
+#   cidr_block        = "10.0.1.0/24"
+#   availability_zone = "us-east-2b"
+# }
+
+# # associate the internet gateway into newly created subnet for us-east-1b
+# resource "aws_route_table_association" "my_public_route_association_for_east_2b" {
+#   subnet_id      = aws_subnet.my_subnet_public_southeast_1b.id
+#   route_table_id = aws_route_table.my_public_route_table.id
+# }
+
+# create an Application Load Balancer.
+# attach the previous availability zones' subnets into this load balancer.
+
+resource "aws_lb" "my_alb" {
+  name               = "my-alb"
+  internal           = false         # set lb for public access
+  load_balancer_type = "application" # use Application Load Balancer
+  security_groups    = [aws_security_group.TerraformEC2_security.id]
+  subnets = [ # attach the availability zones' subnets.
+    aws_subnet.public[0].id, aws_subnet.public[1].id,
+  ]
+}
+
+resource "aws_security_group" "my_alb_security_group" {
+  vpc_id = aws_vpc.main.id
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+# create an alb listener for my_alb.
+# forward rule: only accept incoming HTTP request on port 80,
+# then it'll be forwarded to port target:8080.
+resource "aws_lb_listener" "my_alb_listener" {
+  load_balancer_arn = aws_lb.my_alb.arn
+  port              = 80
+  protocol          = "HTTP"
+  default_action {
+    target_group_arn = aws_lb_target_group.my_alb_target_group.arn
+    type             = "forward"
+  }
+}
+
+# my_alb will forward the request to a particular app,
+# that listen on 8080 within instances on my_vpc.
+resource "aws_lb_target_group" "my_alb_target_group" {
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+}
