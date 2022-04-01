@@ -183,3 +183,7 @@ resource "aws_lb_target_group" "my_alb_target_group" {
   protocol = "HTTP"
   vpc_id   = aws_vpc.main.id
 }
+
+output "jump-box-details" {
+  value = "${aws_route53_record.jump_box_dns.fqdn} - ${aws_instance.jump_box.private_ip} - ${aws_instance.jump_box.id} - ${aws_instance.jump_box.availability_zone}"
+}
