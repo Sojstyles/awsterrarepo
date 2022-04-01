@@ -185,12 +185,12 @@ resource "aws_lb_target_group" "my_alb_target_group" {
 }
 
 output "jump-box-details" {
-  value = "${aws_route53_record.jump_box_dns.fqdn} - ${aws_instance.jump_box.private_ip} - ${aws_instance.jump_box.id} - ${aws_instance.jump_box.availability_zone}"
+  value = "${aws_instance.jump_box.private_ip} - ${aws_instance.jump_box.id} - ${aws_instance.jump_box.availability_zone}"
 }
 
 resource "aws_vpc_ipv4_cidr_block_association" "secondary_cidr" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = "172.2.0.0/16"
+  cidr_block = [aws_vpc.main.cidr_block]
 }
 
 # Declare the data source
@@ -202,7 +202,7 @@ data "aws_availability_zones" "available" {
 
 resource "aws_subnet" "primary" {
   vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
-  cidr_block        = "172.2.0.0/24"
+  cidr_block        = [aws_vpc.main.cidr_block]
   availability_zone = data.aws_availability_zones.available.names[0]
   tags = {
     Name = "${var.environemnt_code}-azzoneprimary"
@@ -212,7 +212,7 @@ resource "aws_subnet" "primary" {
 
 resource "aws_subnet" "secondary" {
   vpc_id            = aws_vpc_ipv4_cidr_block_association.secondary_cidr.vpc_id
-  cidr_block        = "172.2.0.0/32"
+  cidr_block        = [aws_vpc.main.cidr_block]
   availability_zone = data.aws_availability_zones.available.names[1]
 
   tags = {

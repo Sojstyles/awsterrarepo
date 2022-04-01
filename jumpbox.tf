@@ -31,12 +31,3 @@ resource "aws_security_group" "jump_box_sg" {
     Name = "${var.environemnt_code}-SG_jumpbox"
   }
 }
-
-#creates a DNS entry for our jump host in Route53
-resource "aws_route53_record" "jump_box_dns" {
-  zone_id = lookup(var.route53_zone, "id")
-  type    = "A"
-  ttl     = "300"
-  name    = "jump.${lookup(var.route53_zone, "name")}"
-  records = ["${aws_instance.jump_box.private_ip}"]
-}
