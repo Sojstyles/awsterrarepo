@@ -1,5 +1,5 @@
 resource "aws_instance" "jump_box" {
-  ami                    = lookup(var.ami_base, "centos-7")
+  ami                    = data.aws_ami.amazonlinux.id
   instance_type          = "t2.medium"
   key_name               = "thirdkey"
   vpc_security_group_ids = [aws_security_group.TerraformEC2_security.id]
