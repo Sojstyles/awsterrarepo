@@ -14,6 +14,7 @@ resource "aws_instance" "jump_box" {
   }
 }
 
+#creating this new security group for other VM’s in the environment to attach later, such that it can be used to allow SSH from the Jump host to the VM’s in the environment.
 resource "aws_security_group" "jump_box_sg" {
   name        = "SG-jumphost"
   description = "Allow SSH from the jump host"
@@ -31,6 +32,7 @@ resource "aws_security_group" "jump_box_sg" {
   }
 }
 
+#creates a DNS entry for our jump host in Route53
 resource "aws_route53_record" "jump_box_dns" {
   zone_id = lookup(var.route53_zone, "id")
   type    = "A"
