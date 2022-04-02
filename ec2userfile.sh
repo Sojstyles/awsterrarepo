@@ -1,4 +1,5 @@
 #!/bin/bash
+sleep 60
 yum update -y
 yum install -y httpd
 systemctl start httpd
