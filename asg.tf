@@ -11,7 +11,6 @@ resource "aws_launch_configuration" "server" {
   lifecycle {
     create_before_destroy = true
   }
-
   user_data = file("ec2userfile.sh")
 }
 
