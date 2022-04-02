@@ -35,6 +35,10 @@ data "aws_ami" "amazonlinux" {
   owners = ["137112412989"]
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
 # Create a VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -48,8 +52,9 @@ locals {
 resource "aws_subnet" "public" {
   count = length(local.public_cidr)
 
-  vpc_id     = aws_vpc.main.id
-  cidr_block = local.public_cidr[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = local.public_cidr[count.index]
 
   tags = {
     Name = "${var.environemnt_code}-public${count.index}"
@@ -59,8 +64,9 @@ resource "aws_subnet" "public" {
 resource "aws_subnet" "private" {
   count = length(local.private_cidr)
 
-  vpc_id     = aws_vpc.main.id
-  cidr_block = local.private_cidr[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = local.private_cidr[count.index]
 
   tags = {
     Name = "${var.environemnt_code}-private${count.index}"
